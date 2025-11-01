@@ -1,0 +1,44 @@
+.footer {
+  background: #101022;
+  color: rgba(255, 255, 255, 0.82);
+  padding: 3rem 0 2rem;
+  margin-top: 4rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+h4 {
+  margin-top: 0;
+  color: white;
+}
+
+p, ul {
+  margin: 0;
+  line-height: 1.6;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+a:hover {
+  color: #ff6d8d;
+}
+
+.bottom {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}

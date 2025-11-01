@@ -1,0 +1,230 @@
+.section {
+  padding: 4.5rem 0;
+}
+
+.intro {
+  display: flex;
+  justify-content: space-between;
+  gap: 2.5rem;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.highlight {
+  background: white;
+  border-radius: 18px;
+  padding: 1.4rem 1.8rem;
+  box-shadow: 0 16px 40px rgba(42, 45, 110, 0.12);
+  max-width: 320px;
+}
+
+.highlight strong {
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.form {
+  background: white;
+  border-radius: 26px;
+  padding: 2.5rem;
+  box-shadow: 0 40px 85px rgba(42, 45, 110, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem 2rem;
+}
+
+.form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  color: #2f2f43;
+}
+
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(92, 95, 255, 0.2);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.95);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: rgba(92, 95, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(92, 95, 255, 0.15);
+}
+
+.serviceDetail {
+  color: #4f4f65;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.availability {
+  grid-column: 1 / -1;
+  background: rgba(92, 95, 255, 0.08);
+  border-radius: 18px;
+  padding: 1.8rem;
+}
+
+.availability h3 {
+  margin-top: 0;
+}
+
+.availabilityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.availabilityCard {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 18px 42px rgba(42, 45, 110, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.availabilityCard h4 {
+  margin: 0;
+  color: #3a3dcf;
+}
+
+.slotList {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.slotList button {
+  border-radius: 12px;
+  border: 1px solid rgba(92, 95, 255, 0.2);
+  padding: 0.65rem;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  color: #37385b;
+  transition: all 0.2s ease;
+}
+
+.slotList button:hover {
+  border-color: rgba(92, 95, 255, 0.6);
+}
+
+.selectedSlot {
+  background: linear-gradient(135deg, rgba(92, 95, 255, 0.15), rgba(255, 109, 141, 0.2));
+  border-color: rgba(92, 95, 255, 0.6) !important;
+  color: #2f2f43;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.paymentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.paymentCard {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  border: 1px solid rgba(92, 95, 255, 0.18);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.paymentCard:hover {
+  border-color: rgba(92, 95, 255, 0.5);
+  box-shadow: 0 12px 28px rgba(92, 95, 255, 0.16);
+}
+
+.paymentCard input {
+  margin-top: 0.2rem;
+}
+
+.paymentCard strong {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.error {
+  color: #d04467;
+  margin-top: 1rem;
+}
+
+.confirmation {
+  margin-top: 2.5rem;
+  background: white;
+  border-radius: 22px;
+  padding: 2rem;
+  box-shadow: 0 26px 60px rgba(42, 45, 110, 0.16);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.paymentInfo {
+  background: rgba(92, 95, 255, 0.08);
+  padding: 1.4rem;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.reference {
+  font-family: 'Fira Code', monospace;
+  background: white;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  align-self: flex-start;
+}
+
+.instructions {
+  color: #3f4163;
+}
+
+.icsButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid rgba(92, 95, 255, 0.3);
+  color: #3a3dcf;
+  padding: 0.75rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 720px) {
+  .intro {
+    flex-direction: column;
+  }
+
+  .form {
+    padding: 1.8rem;
+  }
+}
