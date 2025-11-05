@@ -1,0 +1,44 @@
+.section {
+  padding: 4rem 0 5rem;
+}
+
+.list {
+  display: grid;
+  gap: 1rem;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.item {
+  background: white;
+  border-radius: 18px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 18px 40px rgba(42, 45, 110, 0.12);
+}
+
+summary {
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  padding-right: 1.6rem;
+}
+
+summary::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.item[open] summary::after {
+  content: '−';
+}
+
+.item p {
+  margin: 0.9rem 0 0;
+  color: #4f4f65;
+  line-height: 1.6;
+}

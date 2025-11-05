@@ -1,0 +1,23 @@
+<svg width="480" height="520" viewBox="0 0 480 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Portrait illustré de Daniel</title>
+  <desc id="desc">Illustration abstraite représentant un conseiller souriant.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#5C5FFF" />
+      <stop offset="100%" stop-color="#FF6D8D" />
+    </linearGradient>
+    <radialGradient id="face" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#FFE6D2" />
+      <stop offset="100%" stop-color="#FDB99D" />
+    </radialGradient>
+  </defs>
+  <rect width="480" height="520" rx="28" fill="url(#bg)" opacity="0.18" />
+  <circle cx="240" cy="220" r="140" fill="url(#face)" />
+  <path d="M160 420C180 360 300 360 320 420" stroke="#3F3268" stroke-width="16" stroke-linecap="round" fill="none" />
+  <path d="M170 210C190 190 220 190 240 210" stroke="#3F3268" stroke-width="14" stroke-linecap="round" fill="none" />
+  <path d="M240 210C260 190 290 190 310 210" stroke="#3F3268" stroke-width="14" stroke-linecap="round" fill="none" />
+  <path d="M200 260C220 280 260 280 280 260" stroke="#3F3268" stroke-width="12" stroke-linecap="round" fill="none" />
+  <path d="M160 350C200 320 280 320 320 350" fill="#463B7B" />
+  <ellipse cx="240" cy="110" rx="110" ry="90" fill="#3F3268" />
+  <path d="M110 460C150 420 330 420 370 460" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="22" stroke-linecap="round" fill="none" />
+</svg>
