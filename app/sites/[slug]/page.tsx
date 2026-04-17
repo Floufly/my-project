@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getSiteBySlug } from '@/lib/sites-db';
+import { PLANS } from '@/lib/subscription-plans';
+import SubscribeButton from './SubscribeButton';
 
 export default async function SitePage({ params }: { params: { slug: string } }) {
   const site = getSiteBySlug(params.slug);
@@ -38,7 +40,25 @@ export default async function SitePage({ params }: { params: { slug: string } })
           .footer { background: #1e293b; color: #94a3b8; text-align: center; padding: 1.5rem; font-size: 0.85rem; }
           .demo-banner { background: #fef3c7; border-bottom: 2px solid #f59e0b; padding: 0.8rem 1.5rem; text-align: center; font-size: 0.9rem; color: #92400e; font-weight: 600; }
           .map-btn { display: inline-flex; align-items: center; gap: 8px; background: ${site.primaryColor}; color: white; padding: 0.6rem 1.4rem; border-radius: 8px; font-weight: 600; margin-top: 0.5rem; font-size: 0.9rem; }
-          @media(max-width:500px){ .hero { padding: 3rem 1rem 4rem; } .section { padding: 2rem 1rem; } }
+          .pricing-section { background: #0f172a; padding: 3rem 1.5rem; text-align: center; }
+          .pricing-title { color: white; font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; }
+          .pricing-sub { color: #94a3b8; margin-bottom: 2rem; font-size: 1rem; }
+          .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; max-width: 800px; margin: 0 auto 1.5rem; }
+          .plan-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border: 2px solid #334155; position: relative; text-align: left; }
+          .plan-card.highlighted { border-color: ${site.primaryColor}; }
+          .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: ${site.primaryColor}; color: white; font-size: 0.75rem; font-weight: 700; padding: 3px 12px; border-radius: 20px; white-space: nowrap; }
+          .plan-name { color: white; font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
+          .plan-price { color: white; font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+          .plan-price span { font-size: 1rem; font-weight: 400; color: #94a3b8; }
+          .plan-desc { color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem; }
+          .plan-features { list-style: none; margin-bottom: 1.2rem; }
+          .plan-features li { color: #cbd5e1; font-size: 0.85rem; padding: 3px 0; }
+          .plan-features li::before { content: "✓ "; color: ${site.primaryColor}; font-weight: 700; }
+          .plan-btn { display: block; width: 100%; padding: 0.7rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; text-align: center; }
+          .plan-btn.primary { background: ${site.primaryColor}; color: white; }
+          .plan-btn.secondary { background: transparent; color: #cbd5e1; border: 1px solid #475569; }
+          .trial-note { color: #64748b; font-size: 0.82rem; margin-top: 0.5rem; }
+          @media(max-width:500px){ .hero { padding: 3rem 1rem 4rem; } .section { padding: 2rem 1rem; } .plans-grid { grid-template-columns: 1fr; } }
         `}</style>
       </head>
       <body>
@@ -107,6 +127,30 @@ export default async function SitePage({ params }: { params: { slug: string } })
               </div>
             )}
           </div>
+        </section>
+
+        {/* Pricing */}
+        <section className="pricing-section">
+          <h2 className="pricing-title">Gardez votre site en ligne</h2>
+          <p className="pricing-sub">Essai gratuit 30 jours · Sans engagement · Résiliable à tout moment</p>
+          <div className="plans-grid">
+            {PLANS.map((plan) => (
+              <div key={plan.id} className={`plan-card${plan.highlighted ? ' highlighted' : ''}`}>
+                {plan.highlighted && <span className="plan-badge">⭐ Le plus populaire</span>}
+                <div className="plan-name">{plan.name}</div>
+                <div className="plan-price">{plan.priceEur}€<span>/mois</span></div>
+                <div className="plan-desc">{plan.description}</div>
+                <ul className="plan-features">
+                  {plan.features.map((f) => <li key={f}>{f}</li>)}
+                </ul>
+                <SubscribeButton planId={plan.id} slug={site.slug} highlighted={plan.highlighted} primaryColor={site.primaryColor} />
+                <p className="trial-note">30 jours gratuits, puis {plan.priceEur}€/mois</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ color: '#475569', fontSize: '0.85rem' }}>
+            Des questions ? Appelez-nous au {site.phone ?? 'votre numéro'}
+          </p>
         </section>
 
         <footer className="footer">
