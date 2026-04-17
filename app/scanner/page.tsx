@@ -39,6 +39,8 @@ export default function ScannerPage() {
   const [filterCity, setFilterCity] = useState('');
   const [generatingAll, setGeneratingAll] = useState(false);
   const [generatingId, setGeneratingId] = useState<string | null>(null);
+  const [contactingAll, setContactingAll] = useState(false);
+  const [contactingId, setContactingId] = useState<string | null>(null);
 
   async function loadStats() {
     const res = await fetch('/api/scanner?action=stats');
@@ -97,6 +99,51 @@ export default function ScannerPage() {
       alert(`Erreur: ${err instanceof Error ? err.message : 'Inconnue'}`);
     } finally {
       setGeneratingId(null);
+    }
+  }
+
+  async function handleContactAll() {
+    if (!confirm(`Envoyer un SMS à tous les commerces avec site généré ? (Twilio requis)`)) return;
+    setContactingAll(true);
+    setMessage('Envoi des messages en cours...');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contactAll: true, channels: ['sms'] }),
+      });
+      const data = await res.json();
+      const errMsg = data.errors?.length ? ` (${data.errors.length} erreurs)` : '';
+      setMessage(`${data.sent} messages envoyés${errMsg}`);
+      await loadStats();
+      await loadBusinesses();
+    } catch {
+      setMessage('Erreur lors de l\'envoi');
+    } finally {
+      setContactingAll(false);
+    }
+  }
+
+  async function handleContactOne(placeId: string) {
+    setContactingId(placeId);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ placeId, channels: ['sms'] }),
+      });
+      const data = await res.json();
+      if (!data.success) {
+        const errDetail = data.results?.map((r: { error?: string }) => r.error).filter(Boolean).join(', ');
+        alert(`Échec: ${errDetail || data.error || 'Erreur inconnue'}`);
+      } else {
+        await loadBusinesses();
+        await loadStats();
+      }
+    } catch (err) {
+      alert(`Erreur: ${err instanceof Error ? err.message : 'Inconnue'}`);
+    } finally {
+      setContactingId(null);
     }
   }
 
@@ -254,6 +301,13 @@ export default function ScannerPage() {
             >
               {generatingAll ? 'Génération...' : '⚡ Générer tous les sites'}
             </button>
+            <button
+              onClick={handleContactAll}
+              disabled={contactingAll}
+              style={{ padding: '0.4rem 0.8rem', background: contactingAll ? '#94a3b8' : '#0369a1', color: 'white', border: 'none', borderRadius: 6, cursor: contactingAll ? 'not-allowed' : 'pointer', fontSize: '0.9rem', fontWeight: 600 }}
+            >
+              {contactingAll ? 'Envoi...' : '📨 Contacter tous'}
+            </button>
           </div>
         </div>
 
@@ -319,6 +373,25 @@ export default function ScannerPage() {
                     >
                       👁️ Voir le site
                     </a>
+                  )}
+                  {b.status === 'site_generated' && b.phone && (
+                    <button
+                      onClick={() => handleContactOne(b.placeId)}
+                      disabled={contactingId === b.placeId}
+                      style={{ padding: '4px 12px', background: '#0369a1', color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600 }}
+                    >
+                      {contactingId === b.placeId ? '...' : '📨 Envoyer SMS'}
+                    </button>
+                  )}
+                  {b.status === 'contacted' && (
+                    <span style={{ padding: '4px 12px', background: '#fef3c7', color: '#92400e', borderRadius: 8, fontSize: '0.82rem', fontWeight: 600 }}>
+                      ✉️ Contacté
+                    </span>
+                  )}
+                  {b.status === 'converted' && (
+                    <span style={{ padding: '4px 12px', background: '#dcfce7', color: '#166534', borderRadius: 8, fontSize: '0.82rem', fontWeight: 600 }}>
+                      ✅ Client
+                    </span>
                   )}
                 </div>
               </div>
