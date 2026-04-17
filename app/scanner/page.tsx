@@ -37,6 +37,8 @@ export default function ScannerPage() {
   const [businesses, setBusinesses] = useState<ScannedBusiness[]>([]);
   const [noWebsiteOnly, setNoWebsiteOnly] = useState(true);
   const [filterCity, setFilterCity] = useState('');
+  const [generatingAll, setGeneratingAll] = useState(false);
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
 
   async function loadStats() {
     const res = await fetch('/api/scanner?action=stats');
@@ -57,6 +59,46 @@ export default function ScannerPage() {
     loadStats();
     loadBusinesses();
   }, []);
+
+  async function handleGenerateAll() {
+    setGeneratingAll(true);
+    setMessage('Génération des sites en cours...');
+    try {
+      const res = await fetch('/api/generate-site', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ generateAll: true, city: filterCity || undefined }),
+      });
+      const data = await res.json();
+      setMessage(`${data.generated} sites générés avec succès !`);
+      await loadStats();
+      await loadBusinesses();
+    } catch {
+      setMessage('Erreur lors de la génération des sites');
+    } finally {
+      setGeneratingAll(false);
+    }
+  }
+
+  async function handleGenerateOne(placeId: string) {
+    setGeneratingId(placeId);
+    try {
+      const res = await fetch('/api/generate-site', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ placeId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      await loadBusinesses();
+      await loadStats();
+      window.open(data.url, '_blank');
+    } catch (err) {
+      alert(`Erreur: ${err instanceof Error ? err.message : 'Inconnue'}`);
+    } finally {
+      setGeneratingId(null);
+    }
+  }
 
   async function handleScan(e: React.FormEvent) {
     e.preventDefault();
@@ -199,11 +241,18 @@ export default function ScannerPage() {
               />
               Sans site seulement
             </label>
-            <button
+                <button
               onClick={loadBusinesses}
               style={{ padding: '0.4rem 0.8rem', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: 6, cursor: 'pointer', fontSize: '0.9rem' }}
             >
               Actualiser
+            </button>
+            <button
+              onClick={handleGenerateAll}
+              disabled={generatingAll}
+              style={{ padding: '0.4rem 0.8rem', background: generatingAll ? '#94a3b8' : '#7c3aed', color: 'white', border: 'none', borderRadius: 6, cursor: generatingAll ? 'not-allowed' : 'pointer', fontSize: '0.9rem', fontWeight: 600 }}
+            >
+              {generatingAll ? 'Génération...' : '⚡ Générer tous les sites'}
             </button>
           </div>
         </div>
@@ -246,13 +295,32 @@ export default function ScannerPage() {
                   {b.phone && <span style={{ marginLeft: 12 }}>📞 {b.phone}</span>}
                   {b.rating && <span style={{ marginLeft: 12 }}>⭐ {b.rating} ({b.reviewCount} avis)</span>}
                 </div>
-                {!b.hasWebsite && (
-                  <div style={{ marginTop: 8 }}>
+                <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                  {!b.hasWebsite && (
                     <span style={{ background: '#fef2f2', color: '#dc2626', padding: '2px 10px', borderRadius: 12, fontSize: '0.8rem', fontWeight: 600 }}>
                       ✗ Pas de site web
                     </span>
-                  </div>
-                )}
+                  )}
+                  {!b.hasWebsite && b.status === 'new' && (
+                    <button
+                      onClick={() => handleGenerateOne(b.placeId)}
+                      disabled={generatingId === b.placeId}
+                      style={{ padding: '4px 12px', background: '#7c3aed', color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600 }}
+                    >
+                      {generatingId === b.placeId ? '...' : '🌐 Générer le site'}
+                    </button>
+                  )}
+                  {b.generatedSiteUrl && (
+                    <a
+                      href={b.generatedSiteUrl}
+                      target="_blank"
+                      rel="noopener"
+                      style={{ padding: '4px 12px', background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe', borderRadius: 8, fontSize: '0.82rem', fontWeight: 600 }}
+                    >
+                      👁️ Voir le site
+                    </a>
+                  )}
+                </div>
               </div>
             ))}
           </div>
